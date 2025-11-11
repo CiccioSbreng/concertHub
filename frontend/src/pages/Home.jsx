@@ -4,7 +4,7 @@ import EventCard from '../components/EventCard'
 
 export default function Home() {
   const [form, setForm] = useState({
-    city: 'Roma',
+    city: '',
     keyword: '',
     start: '',
     end: '',
