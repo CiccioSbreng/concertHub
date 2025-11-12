@@ -1,0 +1,20 @@
+# dipendenze
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# env / segreti
+.env
+backend/.env
+frontend/.env
+
+# build/artefatti
+dist/
+build/
+
+# vari
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+.DS_Store
+
