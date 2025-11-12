@@ -1,0 +1,58 @@
+:root{
+  --bg1:#5d6d8e; --bg2:#284476; --glow:#6e71f5; --muted:#9aa4b2;
+}
+body{background: radial-gradient(1200px 600px at 10% 0%, #717c96 0%, var(--bg1) 60%, #0b0d10 100%); color:#e9ecef;}
+/* Titolo grande con leggero glow */
+.app-title{letter-spacing:.5px; text-shadow:0 2px 24px rgba(69, 67, 79, 0.259);}
+
+/* Barra filtri tipo “card glass” */
+.filters{
+  background: linear-gradient(135deg, rgba(99,102,241,.14), rgba(56,189,248,.10));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:1rem; padding:1rem 1.25rem;
+  backdrop-filter: blur(8px);
+}
+.filters .form-control,.filters .form-select{
+  background:#11151b; border-color:#2a2f39; color:#e9ecef;
+}
+.filters .form-control::placeholder{color:#6e7683}
+
+/* Card evento con profondità e hover dolce */
+.card.event{
+  background:var(--bg2); border:1px solid rgba(255,255,255,.06);
+  border-radius:1rem; overflow:hidden;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card.event:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+  border-color:rgba(99,102,241,.35);
+}
+
+/* Immagini: rapporto e zoom lieve all’hover */
+.event .ratio{ --bs-aspect-ratio: 56.25%; } /* 16:9 */
+.event img{object-fit:cover; transition: transform .35s ease;}
+.card.event:hover img{ transform: scale(1.04); }
+
+/* Badge “soft” per genere */
+.badge-soft{
+  background:rgba(99,102,241,.15); border:1px solid rgba(99,102,241,.35);
+  color:#c7c9ff; padding:.4rem .6rem; border-radius:.6rem;
+}
+
+/* Bottoni più eleganti */
+.btn-primary{
+  background:linear-gradient(180deg, #6d72ff, #4f54e8); border:none;
+  box-shadow:0 6px 18px rgba(99,102,241,.35);
+}
+.btn-outline-light{border-color:#3a3f4b; color:#e9ecef;}
+.btn-outline-light:hover{background:#2a2f39;}
+
+/* Paginazione compatta */
+.pagination .page-link{background:#616f88; border-color:#2a2f39; color:#e9ecef;}
+.pagination .page-item.active .page-link{background:#4f54e8; border-color:#4f54e8}
+
+/* Micro-entrata delle card */
+@keyframes fadeUp{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)}}
+.appear{animation:fadeUp .35s ease both;}
+
