@@ -48,6 +48,7 @@ async function start() {
     console.log('✅ MongoDB connesso');
   } catch (err) {
     console.error('⚠️ Impossibile connettersi a MongoDB, avvio API senza DB');
+    console.error(err.message);  // <-- log dell'errore vero
   }
 
   app.listen(PORT, () => {

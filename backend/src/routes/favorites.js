@@ -28,9 +28,15 @@ router.post('/', auth, async (req, res) => {
     }
 
     const fav = await Favorite.findOneAndUpdate(
-      { user: req.user.id, eventId },
-      { name, image, date, venue, city, url },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      { user: req.user.id, eventId }, // filtro
+      {
+        $set: { name, image, date, venue, city, url },       // aggiorna questi campi
+        $setOnInsert: { user: req.user.id, eventId },        // solo se il documento è nuovo
+      },
+      {
+        new: true,
+        upsert: true,
+      }
     );
 
     res.status(201).json(fav);
