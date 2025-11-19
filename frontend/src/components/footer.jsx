@@ -1,19 +1,26 @@
+// frontend/src/components/footer.jsx
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="main-footer mt-4">
-      <div className="container app-container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 py-2">
+    <footer className="clean-footer">
+      <div className="footer-inner">
 
-        <div className="footer-text">
-          © {year} ConcertHub — Tutti i diritti riservati
+        {/* Logo identico alla navbar */}
+        <div className="footer-logo">
+          Concert<span className="footer-logo-accent">Hub</span>
         </div>
 
-        <div className="footer-secondary">
-          Realizzato con React e passione 🎵
+        {/* Credito creatore */}
+        <div className="footer-credit">
+          Creato da <span className="footer-highlight">Ciccio Sbreng</span>
         </div>
 
-
+        {/* Copyright */}
+        <div className="footer-copy">
+          © {year} ConcertHub · Tutti i diritti riservati
+        </div>
 
       </div>
     </footer>

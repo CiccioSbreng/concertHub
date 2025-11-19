@@ -1,4 +1,6 @@
-export default function EventCard({ ev }) {
+// frontend/src/components/EventCard.jsx
+
+export default function EventCard({ ev, onAddFavorite }) {
   return (
     <div className="card event h-100 border-0 appear">
       {ev.image && (
@@ -22,14 +24,27 @@ export default function EventCard({ ev }) {
         </p>
 
         <div className="mt-auto">
-          <a
-            href={ev.url}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-primary w-100"
-          >
-            Biglietti
-          </a>
+          <div className="d-flex gap-2">
+            <a
+              href={ev.url}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary w-100"
+            >
+              Biglietti
+            </a>
+
+            {onAddFavorite && (
+              <button
+                type="button"
+                className="btn btn-outline-light"
+                onClick={onAddFavorite}
+                title="Aggiungi ai preferiti"
+              >
+                ★
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

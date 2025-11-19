@@ -36,6 +36,50 @@ export async function searchEvents({ city, keyword, size = 12, page = 0, start, 
   return res.json();
 }
 
+// ---- AUTH: login / registrazione ----
+
+// POST /api/auth/login
+export async function loginUser(email, password) {
+  const res = await fetch(`${BASE}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Errore login');
+  }
+
+  // salva token per le altre API
+  localStorage.setItem('token', data.token);
+  // notifica la navbar ecc.
+  window.dispatchEvent(new Event('auth-changed'));
+
+  return data; // { token, user }
+}
+
+// POST /api/auth/register
+export async function registerUser(email, password) {
+  const res = await fetch(`${BASE}/api/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Errore registrazione');
+  }
+
+  localStorage.setItem('token', data.token);
+  window.dispatchEvent(new Event('auth-changed'));
+
+  return data; // { token, user }
+}
+
 // ---- PREFERITI: richiedono token nell'header ----
 
 // GET /api/favorites

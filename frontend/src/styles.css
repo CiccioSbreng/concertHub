@@ -1,11 +1,17 @@
 :root{
-  --bg1:#6c7fb0;
-  --bg2:#4871b9;
-  --glow:#7a7dff;
-  --muted:#607592;
+  /* palette base tema scuro + arancione stile "hub" */
+  --bg1:#0b0b0b;
+  --bg2:#161616;
+  --glow:#ff9000;
+  --muted:#999999;
+
+  --accent:#ff9000;
+  --accent-soft:#ffae33;
+  --border-soft:#333333;
 }
 
-/* Sfondo a gradiente pieno, parte chiara più lunga che sfuma nel nero */
+/* ========== LAYOUT BASE PAGINA ========== */
+
 html, body{
   height:100%;
   margin:0;
@@ -13,10 +19,12 @@ html, body{
 }
 
 body{
+  /* sfondo con bagliore arancione centrale + nero */
   background:
-    radial-gradient(1400px 800px at 50% -20%, rgba(10, 66, 221, 0.75), rgba(15, 30, 77, 0.3) 60%, transparent 80%),
-    linear-gradient(107deg, #5e719f 0%, #4a5f98 60%, #05060a 100%);
-  background-color:#05060a;
+    radial-gradient(1200px 700px at 50% -20%, rgba(255, 144, 0, 0.18), transparent 70%),
+    radial-gradient(900px 600px at 0% 100%, rgba(80, 80, 80, 0.35), transparent 70%),
+    linear-gradient(60deg, #000000 0%, #ffae33 35%, #000000 100%);
+  background-color:#000000;
   background-repeat:no-repeat;
   background-size:cover;
   background-attachment:fixed;
@@ -24,7 +32,7 @@ body{
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Layout principale (navbar + contenuto + footer) */
+/* wrapper app (navbar + contenuto + footer) */
 .app-shell{
   min-height:100vh;
   display:flex;
@@ -35,17 +43,18 @@ body{
   flex:1;
 }
 
-/* Contenitore centrale leggermente più racchiuso */
+/* contenitore centrale */
 .app-container{
   max-width:1120px;
   margin-inline:auto;
   padding-inline:0.75rem;
 }
 
-/* NAVBAR */
+/* ========== NAVBAR ========== */
+
 .main-navbar{
   padding:.6rem 0;
-  background: linear-gradient(180deg, rgba(5,6,12,.92), rgba(12,15,25,.78));
+  background: linear-gradient(180deg, rgba(0,0,0,.96), rgba(10,10,10,.9));
   border-bottom:1px solid rgba(255,255,255,.06);
   backdrop-filter: blur(16px);
   position:sticky;
@@ -53,14 +62,42 @@ body{
   z-index:20;
 }
 
+/* logo ConcertHub */
 .navbar-brand{
-  font-weight:700;
+  font-weight:800;
   font-size:1.5rem;
-  color:#f5f7ff;
+  color:#ffffff;
+  text-decoration:none;
+  letter-spacing:.02em;
+}
+
+/* box arancione su "Hub" */
+.navbar-brand .brand-accent{
+  background-color:var(--accent);
+  color:#000;
+  padding:.12rem .4rem;
+  border-radius:.4rem;
+  margin-left:.18rem;
+}
+
+/* il brand non cambia colore all'hover */
+.navbar-brand:hover {
+  color: #f5f7ff !important;
+  text-decoration: none !important;
+}
+
+/* link generici (fuori da navbar) */
+a{
+  color:var(--accent);
   text-decoration:none;
 }
 
-/* Azioni navbar (Preferiti / Login) */
+a:hover{
+  color:var(--accent-soft);
+  text-decoration:underline;
+}
+
+/* pill di destra (Home / Preferiti / Login) */
 .nav-actions{
   gap:0.75rem;
 }
@@ -91,68 +128,76 @@ body{
   letter-spacing:.02em;
 }
 
-/* Preferiti: ghost */
+/* versione ghost scura (Home / Preferiti) */
 .nav-pill-ghost{
-  background:rgba(10,12,30,.6);
-  border-color:rgba(122,125,255,.55);
-  color:#e6e8ff;
-  box-shadow:0 0 0 1px rgba(0,0,0,.4);
+  background:rgba(12,12,12,.9);
+  border-color:rgba(255,144,0,.7);
+  color:#f1f1f1;
+  box-shadow:0 0 0 1px rgba(0,0,0,.8);
 }
 
 .nav-pill-ghost:hover{
-  background:linear-gradient(135deg, rgba(122,125,255,.32), rgba(80,196,255,.16));
-  box-shadow:0 8px 22px rgba(0,0,0,.65);
+  background:linear-gradient(135deg, rgba(255,144,0,.22), rgba(255,213,128,.09));
+  box-shadow:0 8px 22px rgba(0,0,0,.85);
   transform:translateY(-1px);
 }
 
-/* Login: pill piena */
+/* versione piena arancione (Login/Logout) */
 .nav-pill-solid{
-  background:linear-gradient(180deg, #8285f4, #363bb8);
-  border-color:rgba(122,125,255,.8);
-  color:#ffffff;
-  box-shadow:0 6px 18px rgba(22, 20, 57, 0.6);
+  background:linear-gradient(135deg, var(--accent), var(--accent-soft));
+  border-color:rgba(255,144,0,.9);
+  color:#000000;
+  box-shadow:0 6px 18px rgba(0,0,0,0.8);
 }
 
 .nav-pill-solid:hover{
-  filter:brightness(1.06);
+  filter:brightness(1.05);
   transform:translateY(-1px);
 }
 
-/* Barra filtri tipo “card glass” */
+/* ========== FILTRI (card di ricerca) ========== */
+
 .filters{
-  background: linear-gradient(135deg, rgba(110,120,255,.18), rgba(56,189,248,.12));
-  border:1px solid rgba(255,255,255,.12);
+  background: linear-gradient(135deg, rgba(20,20,20,.96), rgba(8,8,8,.98));
+  border:1px solid rgba(255,255,255,.08);
   border-radius:1.2rem;
   padding:1.25rem 1.5rem;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(12px);
   box-shadow:
-    0 18px 55px rgba(0,0,0,.6),
-    0 0 0 1px rgba(255,255,255,.04);
+    0 18px 55px rgba(0,0,0,.85),
+    0 0 0 1px rgba(0,0,0,.9);
   margin-top:1.25rem;
 }
 
 .filters .form-label{
   font-size:.9rem;
-  color:#e0e6ff;
+  color:#f1f1f1;
 }
 
 .filters .form-control,
 .filters .form-select{
-  background:#305c9e;
-  border-color:#2a2f39;
+  background:#0c0c0c;
+  border-color:#2a2a2a;
   color:#e9ecef;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.8);
 }
 
 .filters .form-control::placeholder{
-  color:#6e7683;
+  color:#666666;
 }
 
-/* Card evento con profondità e hover su tutta la card */
+.filters .form-control:focus,
+.filters .form-select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 0.15rem rgba(255,144,0,0.35);
+}
+
+/* ========== CARD EVENTO ========== */
+
 .card.event{
   background:var(--bg2);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:1rem;
+  border:1px solid rgba(255,144,0,.6);
+  border-radius:0.8rem;
   overflow:hidden;
   transition:
     transform .25s ease,
@@ -162,14 +207,38 @@ body{
   transform:translateY(0);
 }
 
-.card.event:hover{
-  transform:translateY(-6px) scale(1.02);
-  box-shadow:0 22px 55px rgba(0,0,0,0.65);
-  border-color:rgba(140,140,255,.55);
-  background:#5574b2;
+/* testo chiaro nelle card */
+.card.event .card-body{
+  color:#f5f5f5;
 }
 
-/* Immagini: leggero zoom all’hover */
+.card.event .card-title,
+.card.event h5{
+  color:#ffffff;
+  font-weight:600;
+}
+
+.card.event .card-text{
+  color:#d0d0d0;
+}
+
+.card.event .card-text.text-muted{
+  color:#a0a0a0 !important;
+}
+
+.card.event a{
+  text-decoration:none;
+}
+
+/* hover card tipo thumbnail "hub" */
+.card.event:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:0 22px 55px rgba(0,0,0,0.9);
+  border-color:rgba(255,144,0,.6);
+  background:#1c1c1c;
+}
+
+/* immagine card con leggero zoom */
 .event img{
   object-fit:cover;
   width:100%;
@@ -181,99 +250,237 @@ body{
   transform: scale(1.05);
 }
 
-/* Badge “soft” per genere */
+/* badge per generi/tag */
 .badge-soft{
-  background:rgba(120,120,255,.18);
-  border:1px solid rgba(120,120,255,.5);
-  color:#d7dbff;
+  background:rgba(255,144,0,.12);
+  border:1px solid rgba(255,144,0,.6);
+  color:#ffe6c0;
   padding:.4rem .65rem;
   border-radius:.6rem;
   font-size:.8rem;
 }
 
-/* Bottoni principali (Biglietti, Cerca, ecc.) */
+/* ========== BOTTONI GENERALI ========== */
+
 .btn-primary{
-  background:linear-gradient(180deg, #8285f4, #363bb8);
+  background:linear-gradient(135deg, var(--accent), var(--accent-soft));
   border:none;
-  box-shadow:0 6px 18px rgba(22, 20, 57, 0.45);
+  box-shadow:0 6px 18px rgba(0,0,0,0.75);
+  color:#000;
+  font-weight:600;
 }
 
 .btn-primary:hover{
-  filter:brightness(1.05);
+  filter:brightness(1.06);
   transform:translateY(-1px);
 }
 
-/* Bottoni outline secondari (Precedente / Successiva) */
 .btn-outline-secondary{
-  border-color:#7d86c5;
-  color:#e7ebff;
-  background:rgba(7, 10, 30, 0.7);
-  box-shadow:0 0 0 1px rgba(0,0,0,.4);
+  border-color:var(--border-soft);
+  color:#f0f0f0;
+  background:rgba(10, 10, 10, 0.9);
+  box-shadow:0 0 0 1px rgba(0,0,0,.85);
   min-width:120px;
   padding:.35rem .9rem;
 }
 
 .btn-outline-secondary:hover:not(:disabled){
-  background:linear-gradient(180deg, #6f74f0, #3b3fb0);
+  background:linear-gradient(135deg, #333333, #505050);
   color:#ffffff;
-  border-color:#a4abff;
+  border-color:#555555;
 }
 
 .btn-outline-secondary:disabled{
-  border-color:#4d5577;
-  color:#9aa1c5;
-  background:rgba(7, 10, 30, 0.55);
+  border-color:#333333;
+  color:#777777;
+  background:rgba(10, 10, 10, 0.75);
   opacity:1;
   cursor:not-allowed;
 }
 
-/* Paginazione (se usi .pagination di Bootstrap) */
+/* ========== PAGINAZIONE BOOTSTRAP (se la usi) ========== */
+
 .pagination .page-link{
-  background:#616f88;
-  border-color:#2a2f39;
+  background:#202020;
+  border-color:#333333;
   color:#e9ecef;
 }
 
 .pagination .page-item.active .page-link{
-  background:#4f54e8;
-  border-color:#080812;
+  background:var(--accent);
+  border-color:#000000;
+  color:#000;
 }
 
-/* Footer */
-.main-footer{
-  border-top: 1px solid rgba(255,255,255,.12);
-  padding: 1.2rem 0 1.4rem;
-  background: linear-gradient(180deg, rgba(17, 22, 40, 0.9), rgb(53, 73, 183));
-  backdrop-filter: blur(10px);
-  font-size: .9rem;
+/* ========== FOOTER CLEAN + MINI ========== */
+
+.clean-footer {
+  border-top: 2px solid var(--accent);
+  background:#000;
+  padding:0.9rem 0 1.1rem; /* footer compatto */
+  margin-top:3rem;
 }
 
-.footer-text{
-  color:#e4e7ff;
-  font-weight:500;
+.footer-inner {
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 0.75rem;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.3rem; /* meno spazio tra le righe */
 }
 
-.footer-secondary{
-  color:#c0c5e4;
-  opacity:.85;
+.footer-logo {
+  font-size:1.25rem;
+  font-weight:800;
+  color:#ffffff;
 }
 
-/* Testi informativi chiari */
-.no-events-text {
-  color:#d6dbff !important;
-  text-shadow:0 0 10px rgba(110,113,245,.25);
+.footer-logo-accent {
+  background:var(--accent);
+  color:#000;
+  padding:0.1rem 0.35rem;
+  border-radius:0.35rem;
+  margin-left:0.2rem;
 }
 
-.text-info-light {
-  color:#d6dbff !important;
+.footer-credit {
+  font-size:0.8rem;
+  color:#cfcfcf;
 }
 
-/* Animazione card */
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(10px)}
-  to{opacity:1; transform:translateY(0)}
+.footer-highlight {
+  color:var(--accent);
+  font-weight:600;
 }
 
-.appear{
-  animation:fadeUp .35s ease both;
+.footer-copy {
+  color:#999;
+  font-size:0.75rem;
+  text-align:center;
+  opacity:0.85;
+}
+
+/* ========== PULSANTI RAPIDI "QUANDO" ========== */
+
+.quick-range-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+}
+
+.quick-range-pill {
+  padding:0.25rem 0.75rem;
+  border-radius:999px;
+  border:1px solid #333;
+  background:#101010;
+  color:#dddddd;
+  font-size:0.78rem;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    transform .1s ease;
+}
+
+.quick-range-pill:hover {
+  background:#181818;
+  border-color:var(--accent);
+  color:#ffffff;
+  transform:translateY(-1px);
+}
+
+.quick-range-pill.active {
+  background:var(--accent);
+  border-color:var(--accent-soft);
+  color:#000;
+  box-shadow:0 0 14px rgba(255,144,0,0.5);
+}
+
+/* tasto reset date: icona piccola circolare */
+.quick-reset-icon {
+  width: 28px;
+  height: 28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+  border:1px solid #555;
+  background:#0f0f0f;
+  color:#ffae33;          /* leggero accento arancione */
+  font-size:0.9rem;
+
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    box-shadow .15s ease,
+    transform .1s ease;
+}
+
+.quick-reset-icon:hover {
+  background:#181818;
+  border-color:var(--accent);
+  color:#ffffff;
+  box-shadow:0 0 10px rgba(255,144,0,0.35);
+  transform:scale(1.05);
+}
+
+
+.quick-reset-icon:active {
+  transform:scale(0.96);
+}
+
+
+
+/* ========== CAMPI DATA "DAL / AL" ========== */
+
+.filters .date-field {
+  background: linear-gradient(-30deg, #ffae33 0%, #141414 55%, rgba(255,144,0,0.10) 100%);
+  border: 1px solid rgba(255,144,0,0.35);
+  color: #f5f5f5;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.55rem;
+  transition:
+    border-color .2s ease,
+    box-shadow .25s ease,
+    background .2s ease;
+}
+
+.filters .date-field:hover {
+  border-color: rgba(255,144,0,0.6);
+  background: linear-gradient(135deg, #1c1c1c 0%, #161616 55%, rgba(255,144,0,0.18) 100%);
+}
+
+.filters .date-field:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: linear-gradient(135deg, #232323 0%, #1a1a1a 55%, rgba(255,144,0,0.22) 100%);
+  box-shadow: 0 0 12px rgba(255,144,0,0.35);
+  color: #fff;
+}
+
+/* label "Dal / Al" evidenziate in arancione */
+.filters .date-label {
+  color: #ffae33 !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ========== FIX NAVBAR: NIENTE UNDERLINE SUI LINK ========== */
+
+/* tolgo l'underline solo nella navbar, lasciandolo nel resto del sito */
+.main-navbar a,
+.main-navbar button {
+  text-decoration: none !important;
+}
+
+.main-navbar a:hover,
+.main-navbar button:hover {
+  text-decoration: none !important;
 }
