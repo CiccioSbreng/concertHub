@@ -269,13 +269,29 @@ export default function Home() {
       {error && <p className="mt-3 text-danger">{error}</p>}
       {info && !error && <p className="mt-3 text-success">{info}</p>}
 
-      <div className="row row-cols-1 row-cols-md-3 g-3 mt-2">
-        {data.events?.map((ev) => (
-          <div className="col" key={ev.id}>
-            <EventCard ev={ev} onAddFavorite={() => handleAddFavorite(ev)} />
+      {/* Stato “nessun evento disponibile” */}
+      {!loading && !error && data.events?.length === 0 && (
+        <div className="text-center text-light py-5">
+          <div className="mb-3">
+            <span className="display-1 d-block">🎧</span>
           </div>
-        ))}
-      </div>
+          <h4 className="mb-2">Nessun evento disponibile</h4>
+          <p className="text-muted mb-0">
+            Prova a cambiare città, data o parola chiave.
+          </p>
+        </div>
+      )}
+
+      {/* Griglia eventi */}
+      {data.events?.length > 0 && (
+        <div className="row row-cols-1 row-cols-md-3 g-3 mt-2">
+          {data.events.map((ev) => (
+            <div className="col" key={ev.id}>
+              <EventCard ev={ev} onAddFavorite={() => handleAddFavorite(ev)} />
+            </div>
+          ))}
+        </div>
+      )}
 
       {data.totalPages > 1 && (
         <div className="d-flex align-items-center justify-content-between mt-3">
