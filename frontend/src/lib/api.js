@@ -1,8 +1,6 @@
 // frontend/src/lib/api.js
 
-const BASE =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
-
+const BASE = 'http://localhost:4000';
 
 // legge il token dal localStorage (per le API protette)
 function getToken() {

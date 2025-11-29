@@ -21,7 +21,6 @@ const app = express();
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
-
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
@@ -31,18 +30,13 @@ app.use(
 // Rate limit per tutte le API
 app.use('/api/', rateLimit({ windowMs: 60_000, max: 60 }));
 
-// Monta le rotte API
+// Monta le rotte
 app.use('/api/ticketmaster', ticketmasterRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/favorites', favoritesRouter);
 
-// rotta diagnostica per Render
+// rotta diagnostica
 app.get('/__ping', (req, res) => res.json({ ok: true }));
-
-// rotta principale: evita "Cannot GET /"
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'ConcertHub API running' });
-});
 
 const PORT = process.env.PORT || 4000;
 const MONGO_URI =
@@ -54,11 +48,11 @@ async function start() {
     console.log('✅ MongoDB connesso');
   } catch (err) {
     console.error('⚠️ Impossibile connettersi a MongoDB, avvio API senza DB');
-    console.error(err.message);
+    console.error(err.message);  // <-- log dell'errore vero
   }
 
   app.listen(PORT, () => {
-    console.log(`🚀 ConcertHub API in ascolto su http://localhost:${PORT}`);
+    console.log(`✅ ConcertHub API in ascolto su http://localhost:${PORT}`);
   });
 }
 
