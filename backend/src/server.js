@@ -17,18 +17,25 @@ const favoritesRouter = require('./routes/favorites');
 
 const app = express();
 
+// siamo dietro a un proxy (Render), utile per rate-limit ecc.
+app.set('trust proxy', 1);
+
 // Middleware base
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-  })
-);
+
+// ✅ CORS aperto: locale + Render + qualunque origin
+app.use(cors());
 
 // Rate limit per tutte le API
-app.use('/api/', rateLimit({ windowMs: 60_000, max: 60 }));
+app.use(
+  '/api/',
+  rateLimit({
+    windowMs: 60_000,
+    max: 60,
+  })
+);
 
 // Monta le rotte
 app.use('/api/ticketmaster', ticketmasterRouter);
