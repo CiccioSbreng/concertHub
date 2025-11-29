@@ -52,7 +52,7 @@ async function start() {
   }
 
   app.listen(PORT, () => {
-    console.log(`✅ ConcertHub API in ascolto su http://localhost:${PORT}`);
+    console.log(`🚀 ConcertHub API in ascolto su http://localhost:${PORT}`);
   });
 }
 
