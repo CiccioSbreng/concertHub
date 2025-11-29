@@ -17,9 +17,6 @@ const favoritesRouter = require('./routes/favorites');
 
 const app = express();
 
-// siamo dietro a un proxy (Render), serve per express-rate-limit
-app.set('trust proxy', 1);
-
 // Middleware base
 app.use(helmet());
 app.use(morgan('dev'));
@@ -32,15 +29,7 @@ app.use(
 );
 
 // Rate limit per tutte le API
-app.use(
-  '/api/',
-  rateLimit({
-    windowMs: 60_000,
-    max: 60,
-    standardHeaders: true,
-    legacyHeaders: false,
-  })
-);
+app.use('/api/', rateLimit({ windowMs: 60_000, max: 60 }));
 
 // Monta le rotte API
 app.use('/api/ticketmaster', ticketmasterRouter);
@@ -56,20 +45,16 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI =
+  process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/concerthub';
 
 async function start() {
-  if (!MONGO_URI) {
-    console.error('❌ MONGO_URI non impostata, esco.');
-    process.exit(1);
-  }
-
   try {
     await mongoose.connect(MONGO_URI);
     console.log('✅ MongoDB connesso');
   } catch (err) {
-    console.error('❌ Errore connessione a MongoDB:', err.message);
-    process.exit(1);
+    console.error('⚠️ Impossibile connettersi a MongoDB, avvio API senza DB');
+    console.error(err.message);
   }
 
   app.listen(PORT, () => {
