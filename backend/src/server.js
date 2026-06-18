@@ -57,10 +57,10 @@ app.use(cors({
 app.use('/api/', rateLimit({ windowMs: 60_000, max: 60 }));
 
 // Limite più stretto sugli endpoint sensibili di autenticazione (anti brute-force):
-// max 15 tentativi ogni 15 minuti per IP su login e registrazione.
+// max 5 tentativi ogni 15 minuti per IP su login e registrazione.
 const authLimiter = rateLimit({
   windowMs: 15 * 60_000,
-  max: 15,
+  max: 5,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Troppi tentativi. Riprova tra qualche minuto.' },

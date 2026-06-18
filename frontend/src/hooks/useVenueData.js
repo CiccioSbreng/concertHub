@@ -5,6 +5,13 @@ function overpass(query, signal) {
   return fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, { signal }).then((r) => r.json());
 }
 
+// Cache in memoria dei risultati Dintorni, per coordinate del venue.
+// I POI attorno a un venue non cambiano durante la sessione: riaprendo lo
+// stesso evento si riusa il risultato senza richiamare Overpass (più veloce,
+// meno rischio di rate-limit). Si svuota al refresh della pagina.
+const venueCache = new Map();
+const cacheKey = (lat, lon) => `${lat},${lon}`;
+
 function distanceM(lat1, lon1, lat2, lon2) {
   const R = 6371000;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -40,6 +47,13 @@ export function useVenueData(ev) {
 
   useEffect(() => {
     if (lat == null || lon == null) return;
+
+    const applyResult = (r) => { setParks(r.parks); setRestaurants(r.restaurants); setParkings(r.parkings); };
+
+    // Cache hit: riusa il risultato già elaborato, niente chiamata di rete.
+    const cached = venueCache.get(cacheKey(lat, lon));
+    if (cached) { applyResult(cached); return; }
+
     const ctrl = new AbortController();
     const tid  = setTimeout(() => ctrl.abort(), 20000);
 
@@ -72,12 +86,12 @@ export function useVenueData(ev) {
         }
 
         // Parchi e verde
-        setParks(parkEls.slice(0, 5).map((e) => ({ id: e.id, type: e.type, name: e.tags.name })));
+        const parks = parkEls.slice(0, 5).map((e) => ({ id: e.id, type: e.type, name: e.tags.name }));
 
         // Ristoranti / pizzerie / pub (niente catene note)
         const restAll = restEls.filter((e) => !CHAIN_RE.test(e.tags.name));
         const restList = (restAll.length === 0 ? restEls : restAll).slice(0, 6);
-        setRestaurants(restList.map((e) => ({ id: e.id, name: e.tags.name, type: e.tags.amenity, lat: e.lat ?? e.center?.lat, lon: e.lon ?? e.center?.lon })));
+        const restaurants = restList.map((e) => ({ id: e.id, name: e.tags.name, type: e.tags.amenity, lat: e.lat ?? e.center?.lat, lon: e.lon ?? e.center?.lon }));
 
         // Parcheggi (con indicazione a pagamento)
         const pAll = parkingEls
@@ -85,23 +99,25 @@ export function useVenueData(ev) {
           .filter((e) => !PARKING_NOISE_RE.test(e.tags?.name ?? ""));
         const named = pAll.filter((e) => e.tags?.name);
         const list = named.length > 0 ? named : pAll;
-        setParkings(
-          list
-            .map((e) => {
-              const pLat = e.lat ?? e.center?.lat;
-              const pLon = e.lon ?? e.center?.lon;
-              return {
-                id: e.id,
-                name: e.tags?.name || (e.tags?.fee === "yes" ? "Parcheggio a pagamento" : "Parcheggio"),
-                fee: e.tags?.fee || null,
-                lat: pLat,
-                lon: pLon,
-                dist: pLat != null && pLon != null ? distanceM(lat, lon, pLat, pLon) : null,
-              };
-            })
-            .sort((a, b) => (a.dist ?? 9999) - (b.dist ?? 9999))
-            .slice(0, 5)
-        );
+        const parkings = list
+          .map((e) => {
+            const pLat = e.lat ?? e.center?.lat;
+            const pLon = e.lon ?? e.center?.lon;
+            return {
+              id: e.id,
+              name: e.tags?.name || (e.tags?.fee === "yes" ? "Parcheggio a pagamento" : "Parcheggio"),
+              fee: e.tags?.fee || null,
+              lat: pLat,
+              lon: pLon,
+              dist: pLat != null && pLon != null ? distanceM(lat, lon, pLat, pLon) : null,
+            };
+          })
+          .sort((a, b) => (a.dist ?? 9999) - (b.dist ?? 9999))
+          .slice(0, 5);
+
+        const result = { parks, restaurants, parkings };
+        venueCache.set(cacheKey(lat, lon), result);
+        applyResult(result);
       })
       .catch(() => {});
 

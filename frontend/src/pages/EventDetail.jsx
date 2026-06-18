@@ -81,18 +81,6 @@ export default function EventDetail() {
   const stageRef = useRef(null);
   const [barFloating, setBarFloating] = useState(false);
 
-  const [venueVisible, setVenueVisible] = useState(false);
-  const venueSentinelRef = useRef(null);
-  useEffect(() => {
-    if (!ev || !venueSentinelRef.current) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVenueVisible(true); obs.disconnect(); } },
-      { rootMargin: "300px" }
-    );
-    obs.observe(venueSentinelRef.current);
-    return () => obs.disconnect();
-  }, [ev]);
-
   useEffect(() => {
     if (!ev) return;
     const stage = stageRef.current;
@@ -142,14 +130,7 @@ export default function EventDetail() {
 
   function scrollTo(tab) {
     setActiveTab(tab);
-    const doScroll = () =>
-      document.getElementById(`section-${tab}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (tab === "dove" && !venueVisible) {
-      setVenueVisible(true);
-      setTimeout(doScroll, 60);
-    } else {
-      doScroll();
-    }
+    document.getElementById(`section-${tab}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   /* ── early returns ── */
@@ -322,10 +303,8 @@ export default function EventDetail() {
         {/* ── ARTISTA ── */}
         <ArtistSection ev={ev} artist={artist} {...media} />
 
-        {/* ── DOVE & COME (lazy) ── */}
-        <div ref={venueSentinelRef}>
-          {venueVisible && <VenueSection ev={ev} />}
-        </div>
+        {/* ── DOVE & COME ── */}
+        <VenueSection ev={ev} />
 
         {/* ── CTA biglietti (solo mobile, in fondo al contenuto) ── */}
         <div className="ed-sticky-cta">
