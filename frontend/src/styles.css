@@ -4466,12 +4466,12 @@ input.input[type="date"] {
   .ev-card__foot .btn--sm {
     font-size: 0.75rem;
     padding: 9px 12px;
-    min-height: 40px;
+    min-height: 44px;
   }
   .ev-card__detail-link {
     font-size: 0.82rem;
     white-space: nowrap;
-    min-height: 40px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
@@ -6415,6 +6415,16 @@ input.input[type="date"] {
   to { --card-angle: 360deg; }
 }
 
+/* Su mobile mix-blend-mode su layer fixed a tutto schermo costringe il
+   browser a ricomporre l'intera viewport ad ogni scroll -> scatti su device
+   deboli. Togliamo il blend e abbassiamo l'opacità: stesso effetto, zero costo. */
+@media (max-width: 820px) {
+  .grain-overlay {
+    mix-blend-mode: normal;
+    opacity: 0.025;
+  }
+}
+
 /* ── 4. Parallax hero (transform impostato via JS) ────────── */
 .hero__art {
   will-change: transform;
@@ -6519,5 +6529,16 @@ input.input[type="date"] {
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee__track { animation: none; }
+}
+
+/* Mobile: chip più compatti così ne entrano di più senza che lo scorrimento
+   sembri lento, e il nome non occupa mezza barra. */
+@media (max-width: 640px) {
+  .marquee { padding: 10px 0; }
+  .marquee__track { gap: 10px; animation-duration: 40s; }
+  .marquee__chip { gap: 9px; padding: 6px 14px 6px 6px; }
+  .marquee__thumb { width: 30px; height: 30px; }
+  .marquee__name { font-size: 0.8rem; max-width: 150px; }
+  .marquee__date { font-size: 0.68rem; }
 }
 

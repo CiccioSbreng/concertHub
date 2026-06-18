@@ -40,11 +40,14 @@ export default function Home() {
   const heroRef = useRef(null);
   const artRef = useRef(null);
 
-  // Parallax: la collage hero scorre più lenta dello scroll
+  // Parallax: la collage hero scorre più lenta dello scroll.
+  // Solo desktop: su mobile l'effetto si nota appena ma il listener di scroll
+  // pesa sulla fluidità, quindi lo disattiviamo sotto gli 820px.
   useEffect(() => {
     const art = artRef.current;
     if (!art) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(max-width: 820px)").matches) return;
     let raf = 0;
     const onScroll = () => {
       if (raf) return;
